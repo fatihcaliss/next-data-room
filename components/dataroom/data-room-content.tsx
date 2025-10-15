@@ -1,0 +1,139 @@
+"use client";
+
+import { useState } from "react";
+import { useFolders } from "@/lib/queries/folders";
+import { useFiles as useFilesQuery } from "@/lib/queries/files";
+import { CreateFolderDialog } from "@/components/folders/create-folder-dialog";
+import { UploadPdfDialog } from "@/components/files/upload-pdf-dialog";
+import { Button } from "@/components/ui/button";
+import { FolderPlus, Upload } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts";
+import { TableRow } from "./table-row";
+
+interface DataRoomContentProps {
+  folderId: string;
+}
+
+export function DataRoomContent({ folderId }: DataRoomContentProps) {
+  const [showCreateFolder, setShowCreateFolder] = useState(false);
+  const [showUploadPdf, setShowUploadPdf] = useState(false);
+
+  const { data: folders, isLoading: foldersLoading } = useFolders(
+    folderId === "root" ? null : folderId
+  );
+  const { data: files, isLoading: filesLoading } = useFilesQuery(
+    folderId === "root" ? "root" : folderId
+  );
+
+  const isLoading = foldersLoading || filesLoading;
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts([
+    {
+      key: "/",
+      metaKey: true,
+      action: () => setShowCreateFolder(true),
+    },
+    {
+      key: ".",
+      metaKey: true,
+      action: () => setShowUploadPdf(true),
+    },
+  ]);
+
+  console.log("folders:", folders);
+  return (
+    <div className="space-y-6 p-6">
+      {/* Header with actions */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-semibold">
+          {folderId === "root" ? "Data Room" : "Folder Contents"}
+        </h2>
+        <div className="flex space-x-2">
+          <Button
+            variant="outline"
+            onClick={() => setShowCreateFolder(true)}
+            className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700"
+          >
+            <FolderPlus className="h-4 w-4 mr-2" />
+            New Folder
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => setShowUploadPdf(true)}
+            className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700"
+          >
+            <Upload className="h-4 w-4 mr-2" />
+            Upload PDFs
+          </Button>
+        </div>
+      </div>
+
+      {/* Content */}
+      {isLoading ? (
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} className="h-32 w-full" />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {/* Table Layout */}
+          {(folders && folders.length > 0) || (files && files.length > 0) ? (
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+              <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-600 dark:text-gray-400">
+                <div className="col-span-1">
+                  <input type="checkbox" className="rounded" />
+                </div>
+                <div className="col-span-5">Name</div>
+                <div className="col-span-3">Size</div>
+                <div className="col-span-2">Modified</div>
+                <div className="col-span-1"></div>
+              </div>
+
+              <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                {/* Folders */}
+                {folders &&
+                  folders.map((folder) => (
+                    <TableRow key={folder.id} item={folder} type="folder" />
+                  ))}
+
+                {/* Files */}
+                {files &&
+                  files.map((file) => (
+                    <TableRow key={file.id} item={file} type="file" />
+                  ))}
+              </div>
+            </div>
+          ) : (
+            /* Empty state */
+            <div className="text-center py-12">
+              <div className="text-gray-500 dark:text-gray-400 mb-4">
+                <FolderPlus className="h-12 w-12 mx-auto mb-2" />
+                <p className="text-lg">No folders or files yet</p>
+                <p className="text-sm">
+                  Create a folder or upload some PDFs to get started
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Dialogs */}
+      <CreateFolderDialog
+        open={showCreateFolder}
+        onOpenChange={setShowCreateFolder}
+        parentId={folderId === "root" ? null : folderId}
+      />
+      <UploadPdfDialog
+        open={showUploadPdf}
+        onOpenChange={setShowUploadPdf}
+        folderId={folderId === "root" ? "root" : folderId}
+      />
+    </div>
+  );
+}
