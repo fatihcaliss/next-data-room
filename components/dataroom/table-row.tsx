@@ -25,6 +25,7 @@ import { ShareLinkDialog } from "@/components/share-link-dialog";
 import { useFileUrl } from "@/lib/queries/files";
 import { formatFileSize, formatDate } from "@/lib/utils/format";
 import { Folder as FolderType, File as FileType } from "@/lib/types";
+import { toast } from "sonner";
 
 interface TableRowProps {
   item: FolderType | FileType;
@@ -35,12 +36,48 @@ export function TableRow({ item, type }: TableRowProps) {
   const [showRename, setShowRename] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showShare, setShowShare] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const { data: fileUrl } = useFileUrl(type === "file" ? item.id : "");
 
-  const handleDownload = () => {
-    if (fileUrl) {
+  const handleDownload = async () => {
+    if (!fileUrl || !file) return;
+
+    setIsDownloading(true);
+    const toastId = toast.loading("Preparing download...");
+
+    try {
+      // Fetch the file
+      const response = await fetch(fileUrl);
+      if (!response.ok) throw new Error("Failed to download file");
+
+      // Get the blob
+      const blob = await response.blob();
+
+      // Create download link
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = file.name; // Use the original filename
+
+      // Trigger download
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+
+      toast.success(`Downloaded ${file.name}`, { id: toastId });
+    } catch (error) {
+      console.error("Download failed:", error);
+      toast.error("Download failed. Opening file in new tab...", {
+        id: toastId,
+      });
+      // Fallback to opening in new tab
       window.open(fileUrl, "_blank");
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -65,10 +102,14 @@ export function TableRow({ item, type }: TableRowProps) {
               <span>{item.name}</span>
             </Link>
           ) : (
-            <div className="flex items-center space-x-3 flex-1">
+            <Link
+              href={fileUrl ? fileUrl : ""}
+              target="_blank"
+              className="flex items-center space-x-3 flex-1"
+            >
               <FileText className="h-5 w-5 text-red-400" />
               <span>{item.name}</span>
-            </div>
+            </Link>
           )}
         </div>
 
@@ -112,9 +153,12 @@ export function TableRow({ item, type }: TableRowProps) {
                 </>
               ) : (
                 <>
-                  <DropdownMenuItem onClick={handleDownload}>
+                  <DropdownMenuItem
+                    onClick={handleDownload}
+                    disabled={isDownloading || !fileUrl}
+                  >
                     <Download className="h-4 w-4 mr-2" />
-                    Download
+                    {isDownloading ? "Downloading..." : "Download"}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => setShowDelete(true)}

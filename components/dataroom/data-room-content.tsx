@@ -43,6 +43,8 @@ export function DataRoomContent({ folderId }: DataRoomContentProps) {
   ]);
 
   console.log("folders:", folders);
+  console.log("files:", files);
+  console.log("folderId", folderId);
   return (
     <div className="space-y-6 p-6">
       {/* Header with actions */}
@@ -54,7 +56,7 @@ export function DataRoomContent({ folderId }: DataRoomContentProps) {
           <Button
             variant="outline"
             onClick={() => setShowCreateFolder(true)}
-            className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
           >
             <FolderPlus className="h-4 w-4 mr-2" />
             New Folder
@@ -62,7 +64,7 @@ export function DataRoomContent({ folderId }: DataRoomContentProps) {
           <Button
             variant="outline"
             onClick={() => setShowUploadPdf(true)}
-            className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
           >
             <Upload className="h-4 w-4 mr-2" />
             Upload PDFs

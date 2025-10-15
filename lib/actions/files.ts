@@ -175,7 +175,7 @@ export async function getFileUrl(fileId: string) {
     throw new Error("File not found");
   }
 
-  const { data } = supabase.storage
+  const { data } = await supabase.storage
     .from("documents")
     .createSignedUrl(file.storage_path, 3600); // 1 hour expiry
 
