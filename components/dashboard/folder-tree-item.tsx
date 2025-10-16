@@ -9,7 +9,7 @@ import {
   FolderOpen,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 import { Folder as FolderType, File } from "@/lib/types";
 
@@ -28,7 +28,7 @@ export function FolderTreeItem({
 }: FolderTreeItemProps) {
   const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState(true); // Default to expanded
-
+  const router = useRouter();
   // Find child folders
   const childFolders = allFolders.filter((f) => f.parent_id === folder.id);
 
@@ -37,6 +37,9 @@ export function FolderTreeItem({
 
   const hasChildren = childFolders.length > 0 || folderFiles.length > 0;
   const isActive = pathname === `/dataroom/${folder.id}`;
+
+  console.log("folderFiles:", folderFiles);
+  console.log("allFiles:", allFiles);
 
   return (
     <>
@@ -93,7 +96,10 @@ export function FolderTreeItem({
 
           {/* Render files in this folder */}
           {folderFiles.map((file) => (
-            <SidebarMenuItem key={file.id}>
+            <SidebarMenuItem
+              key={file.id}
+              onClick={() => router.push(`/dataroom/${file.folder_id}`)}
+            >
               <SidebarMenuButton className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer pl-1">
                 <FileIcon className="h-4 w-4 text-gray-500 dark:text-gray-400 flex-shrink-0" />
                 <span className="truncate text-sm ml-0">{file.name}</span>
