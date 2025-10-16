@@ -143,7 +143,7 @@ export async function getFolderPath(folderId: string) {
   while (currentId) {
     const { data: folder, error } = await supabase
       .from("folders")
-      .select("id, name, parent_id")
+      .select("id, name, parent_id, user_id")
       .eq("id", currentId)
       .eq("user_id", user.id)
       .single();

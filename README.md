@@ -7,7 +7,9 @@ A modern, secure document management and sharing platform built with Next.js, Su
 - 🔐 **Authentication**: Secure user authentication with Supabase Auth
 - 📁 **Folder Management**: Create, rename, delete, and navigate nested folders
 - 📄 **PDF Upload**: Upload and manage PDF files with 10MB size limit
-- 🔗 **Share Links**: Generate shareable links for folders
+- 🔗 **Public Folder Sharing**: Generate unique shareable links for folders with read-only access
+- 👀 **Read-Only View**: Public users can view shared folders without authentication
+- 🔒 **Secure Tokens**: 64-character unique tokens for each share link
 - ⌨️ **Keyboard Shortcuts**: Quick actions with Cmd+/ (new folder) and Cmd+. (upload)
 - 📱 **Responsive Design**: Works on desktop and mobile devices
 - 🌙 **Dark Theme**: Modern dark UI matching the design requirements
@@ -39,11 +41,14 @@ npm install
 3. Run the SQL schema from `supabase-schema.sql`:
 
 ```sql
--- Copy and paste the contents of supabase-schema.sql
+-- Copy and paste the entire contents of supabase-schema.sql
+-- This will create tables, RLS policies, and indexes
 ```
 
 4. Create a storage bucket named `documents` in your Supabase dashboard
 5. Get your project URL and anon key from Settings > API
+
+**Note**: The schema includes the new `shared_links` table for folder sharing functionality. See `SHARE_SETUP.md` for detailed setup instructions.
 
 ### 3. Environment Variables
 
@@ -65,34 +70,47 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ## Usage
 
 ### Authentication
+
 - Sign up with your email and password
 - Sign in to access your data room
 - Sign out when done
 
 ### Folder Management
+
 - Click "New Folder" or use Cmd+/ to create folders
 - Right-click folders to rename, delete, or copy share links
 - Navigate by clicking on folder names or using breadcrumbs
 
 ### File Management
+
 - Click "Upload PDFs" or use Cmd+. to upload files
 - Only PDF files under 10MB are allowed
 - Right-click files to download or delete
 - Files open in a new tab when clicked
 
-### Sharing
-- Use the "Copy Share Link" option on folders
-- Share links allow others to view folder contents
-- Links are public - use with caution
+### Sharing (New!)
+
+- Click the share button on any folder to generate a public link
+- Share links are unique tokens that never expire (by default)
+- Anyone with the link can view folder contents in read-only mode
+- No authentication required for accessing shared links
+- Navigate through subfolders within the shared view
+- Public users can only view - no editing or uploading
+- See `SHARE_SETUP.md` for detailed documentation
 
 ## Database Schema
 
-The application uses two main tables:
+The application uses three main tables:
 
 - **folders**: Stores folder hierarchy with parent-child relationships
 - **files**: Stores file metadata linked to folders and users
+- **shared_links**: Stores unique tokens for public folder sharing (new!)
 
-Row Level Security (RLS) ensures users can only access their own data.
+Row Level Security (RLS) ensures:
+
+- Users can only access their own data when authenticated
+- Public users can view shared folders through valid tokens (read-only)
+- Shared folder access includes all subfolders and files
 
 ## File Structure
 
@@ -100,6 +118,7 @@ Row Level Security (RLS) ensures users can only access their own data.
 ├── app/
 │   ├── (auth)/          # Authentication pages
 │   ├── (dashboard)/     # Main application pages
+│   ├── share/[token]/   # Public folder sharing pages (new!)
 │   └── layout.tsx       # Root layout with providers
 ├── components/
 │   ├── auth/            # Authentication components
@@ -110,6 +129,7 @@ Row Level Security (RLS) ensures users can only access their own data.
 │   └── ui/              # shadcn/ui components
 ├── lib/
 │   ├── actions/         # Server actions for database operations
+│   │   └── share.ts     # Share link actions (new!)
 │   ├── queries/         # React Query hooks
 │   ├── supabase/        # Supabase client configuration
 │   ├── types.ts         # TypeScript type definitions
@@ -129,6 +149,7 @@ Row Level Security (RLS) ensures users can only access their own data.
 ### Other Platforms
 
 The app can be deployed to any platform that supports Next.js:
+
 - Netlify
 - Railway
 - DigitalOcean App Platform

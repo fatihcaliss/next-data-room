@@ -18,6 +18,7 @@ interface DeleteFolderDialogProps {
   onOpenChange: (open: boolean) => void;
   folderId: string;
   folderName: string;
+  onDeleteComplete?: () => void;
 }
 
 export function DeleteFolderDialog({
@@ -25,6 +26,7 @@ export function DeleteFolderDialog({
   onOpenChange,
   folderId,
   folderName,
+  onDeleteComplete,
 }: DeleteFolderDialogProps) {
   const deleteFolder = useDeleteFolder();
 
@@ -33,6 +35,7 @@ export function DeleteFolderDialog({
       await deleteFolder.mutateAsync(folderId);
       toast.success("Folder deleted successfully");
       onOpenChange(false);
+      onDeleteComplete?.();
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Failed to delete folder"
