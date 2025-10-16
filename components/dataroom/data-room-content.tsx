@@ -140,17 +140,17 @@ export function DataRoomContent({ folderId }: DataRoomContentProps) {
         </h2>
         <div className="flex lg:space-x-2  lg:flex-row flex-col gap-2 lg:gap-0">
           <Button
-            variant="outline"
+            variant="default"
             onClick={() => setShowCreateFolder(true)}
-            className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+            className="cursor-pointer"
           >
             <FolderPlus className="h-4 w-4 mr-2" />
             New Folder
           </Button>
           <Button
-            variant="outline"
+            variant="default"
             onClick={() => setShowUploadPdf(true)}
-            className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+            className="cursor-pointer"
           >
             <Upload className="h-4 w-4 mr-2" />
             Upload PDFs

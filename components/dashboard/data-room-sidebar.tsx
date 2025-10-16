@@ -61,7 +61,7 @@ export function DataRoomSidebar() {
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     onClick={() => setShowCreateFolder(true)}
-                    className="w-full justify-start text-left h-auto p-3 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer border border-gray-200 dark:border-gray-700"
+                    className="w-full justify-start text-left h-auto p-3  cursor-pointer border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800"
                   >
                     <FolderPlus className="h-4 w-4" />
                     <div className="flex justify-between w-full">
@@ -76,7 +76,7 @@ export function DataRoomSidebar() {
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     onClick={() => setShowUploadPdf(true)}
-                    className="w-full justify-start text-left h-auto p-3 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer border border-gray-200 dark:border-gray-700"
+                    className="w-full justify-start text-left h-auto p-3  cursor-pointer border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800"
                   >
                     <Upload className="h-4 w-4" />
                     <div className="flex justify-between w-full">

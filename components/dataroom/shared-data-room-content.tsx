@@ -85,7 +85,7 @@ export function SharedDataRoomContent({
       setDownloadingFileId(null);
     }
   };
-
+  console.log(folders, files);
   return (
     <div className="space-y-6">
       {/* Content */}
@@ -101,7 +101,7 @@ export function SharedDataRoomContent({
         <div className="space-y-6">
           {/* Table Layout */}
           {folders.length > 0 || files.length > 0 ? (
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+            <div className="rounded-lg overflow-hidden">
               <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-600 dark:text-gray-400">
                 <div className="col-span-6">Name</div>
                 <div className="col-span-3">Size</div>
@@ -139,10 +139,16 @@ export function SharedDataRoomContent({
                     key={file.id}
                     className="grid grid-cols-12 gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                   >
-                    <div className="col-span-6 flex items-center gap-3">
+                    <button
+                      onClick={async () => {
+                        const url = await getSharedFileUrl(file.id, token);
+                        if (url) window.open(url, "_blank");
+                      }}
+                      className="col-span-6 flex items-center gap-3 text-left hover:underline cursor-pointer"
+                    >
                       <FileText className="h-5 w-5 text-red-500 flex-shrink-0" />
                       <span className="truncate">{file.name}</span>
-                    </div>
+                    </button>
                     <div className="col-span-3 flex items-center text-gray-500 dark:text-gray-400 text-sm">
                       {formatFileSize(file.size)}
                     </div>

@@ -52,6 +52,24 @@ BEGIN
 END;
 $$;
 
+-- Create helper function to get user email by user_id
+-- This function safely accesses auth.users table
+CREATE OR REPLACE FUNCTION get_user_email(user_id UUID)
+RETURNS TEXT
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+  user_email TEXT;
+BEGIN
+  SELECT email INTO user_email
+  FROM auth.users
+  WHERE id = user_id;
+  
+  RETURN user_email;
+END;
+$$;
+
 -- Enable RLS on tables
 ALTER TABLE folders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE files ENABLE ROW LEVEL SECURITY;

@@ -27,7 +27,7 @@ export function SignOutButton() {
     <Button
       variant="outline"
       onClick={handleSignOut}
-      className="bg-white text-black hover:bg-gray-100"
+      className="cursor-pointer bg-gray-100 dark:bg-gray-800"
     >
       Sign Out
     </Button>

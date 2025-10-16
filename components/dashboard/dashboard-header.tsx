@@ -28,8 +28,7 @@ export function DashboardHeader() {
 
   return (
     <>
-      <header className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900  w-full pb-6 flex md:items-center md:justify-between justify-start px-6 py-3 md:flex-row flex-col gap-4">
-        {/* <div className="flex items-center justify-between"> */}
+      <header className="border-b border-gray-200 dark:border-gray-800   w-full pb-6 flex md:items-center md:justify-between justify-start px-6 py-3 md:flex-row flex-col gap-4">
         <div className="flex items-center space-x-4">
           <SidebarTrigger className="text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800" />
           <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
@@ -55,7 +54,6 @@ export function DashboardHeader() {
           </button>
           <SignOutButton />
         </div>
-        {/* </div> */}
       </header>
 
       <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />

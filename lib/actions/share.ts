@@ -120,9 +120,17 @@ export async function getSharedFolderData(folderId: string) {
     throw new Error("Folder not found");
   }
 
-  // For now, use a generic owner name
-  // In production, you might want to add a profiles table with display names
-  const ownerEmail = "Data Room Owner";
+  // Get user email from auth.users table using the database function
+  let ownerEmail = "Data Room Owner"; // fallback
+
+  const { data: userEmail, error: userError } = await supabase.rpc(
+    "get_user_email",
+    { user_id: folder.user_id }
+  );
+
+  if (!userError && userEmail) {
+    ownerEmail = userEmail;
+  }
 
   return {
     folder,

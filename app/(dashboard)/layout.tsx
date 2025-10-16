@@ -21,10 +21,10 @@ export default async function DashboardLayout({
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white w-full">
+      <div className="min-h-screen w-full">
         <div className="flex h-[calc(100vh-4rem)]">
           <DataRoomSidebar />
-          <SidebarInset className="flex-1 p-6 bg-white dark:bg-gray-900 overflow-auto">
+          <SidebarInset className="flex-1 p-6 overflow-auto">
             <DashboardHeader />
             {children}
           </SidebarInset>
