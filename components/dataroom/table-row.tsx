@@ -24,11 +24,12 @@ import { RenameFolderDialog } from "@/components/folders/rename-folder-dialog";
 import { DeleteFolderDialog } from "@/components/folders/delete-folder-dialog";
 import { RenameFileDialog } from "@/components/files/rename-file-dialog";
 import { DeleteFileDialog } from "@/components/files/delete-file-dialog";
-import { ShareLinkDialog } from "@/components/share-link-dialog";
 import { useFileUrl } from "@/lib/queries/files";
 import { formatFileSize, formatDate } from "@/lib/utils/format";
 import { Folder as FolderType, File as FileType } from "@/lib/types";
 import { toast } from "sonner";
+import { createShareLink } from "@/lib/actions/share";
+import { Checkbox } from "../ui/checkbox";
 
 interface TableRowProps {
   item: FolderType | FileType;
@@ -45,7 +46,6 @@ export function TableRow({
 }: TableRowProps) {
   const [showRename, setShowRename] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const [showShare, setShowShare] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const { data: fileUrl } = useFileUrl(type === "file" ? item.id : "");
@@ -91,6 +91,24 @@ export function TableRow({
     }
   };
 
+  // Handle copy share link
+  const handleCopyShareLink = async () => {
+    if (!folder?.id) {
+      toast.error("Cannot share folder");
+      return;
+    }
+
+    try {
+      const token = await createShareLink(folder.id);
+      const shareUrl = `${window.location.origin}/share/${token}`;
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success("Share link copied to clipboard!");
+    } catch (error) {
+      toast.error("Failed to create share link");
+      console.error(error);
+    }
+  };
+
   const isFolder = type === "folder";
   const folder = isFolder ? (item as FolderType) : null;
   const file = !isFolder ? (item as FileType) : null;
@@ -99,12 +117,7 @@ export function TableRow({
     <>
       <div className="grid grid-cols-12 gap-4 p-4 hover:bg-gray-750 transition-colors group md:text-sm text-xs min-[320px]:text-xs overflow-x-auto">
         <div className="col-span-1 flex items-center">
-          <input
-            type="checkbox"
-            className="rounded"
-            checked={isSelected}
-            onChange={(e) => onSelect?.(e.target.checked)}
-          />
+          <Checkbox checked={isSelected} onCheckedChange={onSelect} />
         </div>
 
         <div className="col-span-5 flex items-center space-x-3">
@@ -146,7 +159,7 @@ export function TableRow({
             <DropdownMenuContent align="end">
               {isFolder ? (
                 <>
-                  <DropdownMenuItem onClick={() => setShowShare(true)}>
+                  <DropdownMenuItem onClick={handleCopyShareLink}>
                     <LinkIcon className="h-4 w-4 mr-2" />
                     Copy Share Link
                   </DropdownMenuItem>
@@ -209,12 +222,6 @@ export function TableRow({
           <DeleteFolderDialog
             open={showDelete}
             onOpenChange={setShowDelete}
-            folderId={folder.id}
-            folderName={folder.name}
-          />
-          <ShareLinkDialog
-            open={showShare}
-            onOpenChange={setShowShare}
             folderId={folder.id}
             folderName={folder.name}
           />

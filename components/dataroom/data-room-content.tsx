@@ -14,6 +14,7 @@ import { deleteFolder } from "@/lib/actions/folders";
 import { deleteFile } from "@/lib/actions/files";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { Checkbox } from "../ui/checkbox";
 
 interface DataRoomContentProps {
   folderId: string;
@@ -203,16 +204,9 @@ export function DataRoomContent({ folderId }: DataRoomContentProps) {
             <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
               <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-600 dark:text-gray-400">
                 <div className="col-span-1">
-                  <input
-                    type="checkbox"
-                    className="rounded"
+                  <Checkbox
                     checked={isAllSelected}
-                    ref={(input) => {
-                      if (input) {
-                        input.indeterminate = isSomeSelected;
-                      }
-                    }}
-                    onChange={(e) => handleSelectAll(e.target.checked)}
+                    onCheckedChange={handleSelectAll}
                   />
                 </div>
                 <div className="col-span-5">Name</div>

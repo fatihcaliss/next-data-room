@@ -226,7 +226,7 @@ export async function getSharedFileUrl(fileId: string, token: string) {
       folder?.parent_id === shareLink.folder_id ||
       folder?.parent_id === null
     ) {
-      if (folder.parent_id === shareLink.folder_id) {
+      if (folder?.parent_id === shareLink.folder_id) {
         isInSharedTree = true;
       }
       break;
