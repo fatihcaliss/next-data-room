@@ -28,34 +28,34 @@ export function DashboardHeader() {
 
   return (
     <>
-      <header className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900  w-full pb-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <SidebarTrigger className="text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800" />
-            <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-              <Breadcrumbs folderId={folderId} />
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setSearchOpen(true)}
-              className="relative w-64 text-left"
-            >
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400" />
-              <Input
-                placeholder="Search..."
-                className="w-64 bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700 pl-10 pr-10 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 cursor-pointer"
-                readOnly
-              />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-500 dark:text-gray-400 flex flex-row items-center">
-                <Command className="h-3 w-3" />
-                <span className="ml-1">K</span>
-              </div>
-            </button>
-            <SignOutButton />
+      <header className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900  w-full pb-6 flex md:items-center md:justify-between justify-start px-6 py-3 md:flex-row flex-col gap-4">
+        {/* <div className="flex items-center justify-between"> */}
+        <div className="flex items-center space-x-4">
+          <SidebarTrigger className="text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800" />
+          <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+            <Breadcrumbs folderId={folderId} />
           </div>
         </div>
+
+        <div className="flex items-start space-x-4 md:justify-end justify-start w-full md:w-auto md:flex-row flex-col gap-2 lg:gap-0">
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="relative w-64 text-left"
+          >
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400" />
+            <Input
+              placeholder="Search..."
+              className="w-64 bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700 pl-10 pr-10 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 cursor-pointer"
+              readOnly
+            />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-500 dark:text-gray-400 flex flex-row items-center">
+              <Command className="h-3 w-3" />
+              <span className="ml-1">K</span>
+            </div>
+          </button>
+          <SignOutButton />
+        </div>
+        {/* </div> */}
       </header>
 
       <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />

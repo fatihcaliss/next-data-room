@@ -169,7 +169,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
             placeholder="Search files and folders..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent dark:text-white placeholder-gray-400 px-0"
+            className="flex-1 border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent dark:text-white placeholder-gray-400 px-2 mr-6"
             autoFocus
           />
         </div>

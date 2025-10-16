@@ -49,7 +49,7 @@ export function DataRoomContent({ folderId }: DataRoomContentProps) {
         <h2 className="text-2xl font-semibold">
           {folderId === "root" ? "Data Room" : "Folder Contents"}
         </h2>
-        <div className="flex space-x-2">
+        <div className="flex lg:space-x-2  lg:flex-row flex-col gap-2 lg:gap-0">
           <Button
             variant="outline"
             onClick={() => setShowCreateFolder(true)}

@@ -10,12 +10,14 @@ import {
   Trash2,
   Link as LinkIcon,
   Download,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { RenameFolderDialog } from "@/components/folders/rename-folder-dialog";
@@ -88,7 +90,7 @@ export function TableRow({ item, type }: TableRowProps) {
 
   return (
     <>
-      <div className="grid grid-cols-12 gap-4 p-4 hover:bg-gray-750 transition-colors group">
+      <div className="grid grid-cols-12 gap-4 p-4 hover:bg-gray-750 transition-colors group md:text-sm text-xs min-[320px]:text-xs overflow-x-auto">
         <div className="col-span-1 flex items-center">
           <input type="checkbox" className="rounded" />
         </div>
@@ -132,14 +134,16 @@ export function TableRow({ item, type }: TableRowProps) {
             <DropdownMenuContent align="end">
               {isFolder ? (
                 <>
-                  <DropdownMenuItem onClick={() => setShowRename(true)}>
-                    <Edit className="h-4 w-4 mr-2" />
-                    Rename
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setShowShare(true)}>
                     <LinkIcon className="h-4 w-4 mr-2" />
                     Copy Share Link
                   </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => setShowRename(true)}>
+                    <Edit className="h-4 w-4 mr-2" />
+                    Rename
+                  </DropdownMenuItem>
+
                   <DropdownMenuItem
                     onClick={() => setShowDelete(true)}
                     className="text-red-400 focus:text-red-400"
@@ -150,9 +154,11 @@ export function TableRow({ item, type }: TableRowProps) {
                 </>
               ) : (
                 <>
-                  <DropdownMenuItem onClick={() => setShowRename(true)}>
-                    <Edit className="h-4 w-4 mr-2" />
-                    Rename
+                  <DropdownMenuItem
+                    onClick={() => window.open(fileUrl, "_blank")}
+                  >
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    Preview
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={handleDownload}
@@ -160,6 +166,11 @@ export function TableRow({ item, type }: TableRowProps) {
                   >
                     <Download className="h-4 w-4 mr-2" />
                     {isDownloading ? "Downloading..." : "Download"}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => setShowRename(true)}>
+                    <Edit className="h-4 w-4 mr-2" />
+                    Rename
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => setShowDelete(true)}
