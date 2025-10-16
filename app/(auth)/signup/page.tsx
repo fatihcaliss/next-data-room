@@ -44,6 +44,7 @@ export default function SignupPage() {
         router.push("/login");
       }
     } catch (error) {
+      console.error("Failed to sign up", error);
       toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);

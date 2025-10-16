@@ -37,7 +37,7 @@ export interface UpdateFileData {
 }
 
 export interface UploadFileData {
-  file: File;
+  file: globalThis.File;
   folder_id: string;
 }
 

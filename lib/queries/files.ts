@@ -9,7 +9,7 @@ import {
   getFileUrl,
   getAllFiles,
 } from "@/lib/actions/files";
-import { UploadFileData, UpdateFileData } from "@/lib/types";
+import { UpdateFileData } from "@/lib/types";
 
 export function useFiles(folderId: string) {
   return useQuery({

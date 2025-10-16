@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useDeleteFolder } from '@/lib/queries/folders';
+import { useDeleteFolder } from "@/lib/queries/folders";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,8 +10,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { toast } from 'sonner';
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 interface DeleteFolderDialogProps {
   open: boolean;
@@ -20,16 +20,23 @@ interface DeleteFolderDialogProps {
   folderName: string;
 }
 
-export function DeleteFolderDialog({ open, onOpenChange, folderId, folderName }: DeleteFolderDialogProps) {
+export function DeleteFolderDialog({
+  open,
+  onOpenChange,
+  folderId,
+  folderName,
+}: DeleteFolderDialogProps) {
   const deleteFolder = useDeleteFolder();
 
   const handleDelete = async () => {
     try {
       await deleteFolder.mutateAsync(folderId);
-      toast.success('Folder deleted successfully');
+      toast.success("Folder deleted successfully");
       onOpenChange(false);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to delete folder');
+      toast.error(
+        error instanceof Error ? error.message : "Failed to delete folder"
+      );
     }
   };
 
@@ -39,7 +46,9 @@ export function DeleteFolderDialog({ open, onOpenChange, folderId, folderName }:
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Folder</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete the folder "{folderName}"? This action cannot be undone and will also delete all files and subfolders inside it.
+            Are you sure you want to delete the folder &quot;{folderName}&quot;?
+            This action cannot be undone and will also delete all files and
+            subfolders inside it.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -49,7 +58,7 @@ export function DeleteFolderDialog({ open, onOpenChange, folderId, folderName }:
             disabled={deleteFolder.isPending}
             className="bg-red-600 hover:bg-red-700"
           >
-            {deleteFolder.isPending ? 'Deleting...' : 'Delete'}
+            {deleteFolder.isPending ? "Deleting..." : "Delete"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -32,6 +32,7 @@ export default function LoginPage() {
         router.push("/dataroom/root");
       }
     } catch (error) {
+      console.error(error);
       toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);

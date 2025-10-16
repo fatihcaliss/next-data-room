@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase/client';
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export function SignOutButton() {
   const router = useRouter();
@@ -12,19 +12,20 @@ export function SignOutButton() {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) {
-        toast.error('Error signing out');
+        toast.error("Error signing out");
       } else {
-        toast.success('Signed out successfully');
-        router.push('/login');
+        toast.success("Signed out successfully");
+        router.push("/login");
       }
     } catch (error) {
-      toast.error('An unexpected error occurred');
+      console.error("Failed to sign out", error);
+      toast.error("An unexpected error occurred");
     }
   };
 
   return (
-    <Button 
-      variant="outline" 
+    <Button
+      variant="outline"
       onClick={handleSignOut}
       className="bg-white text-black hover:bg-gray-100"
     >

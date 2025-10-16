@@ -2,12 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Search,
-  File as FileIcon,
-  Folder as FolderIcon,
-  X,
-} from "lucide-react";
+import { Search, File as FileIcon, Folder as FolderIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useAllFiles } from "@/lib/queries/files";

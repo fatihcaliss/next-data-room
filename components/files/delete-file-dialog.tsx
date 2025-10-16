@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useDeleteFile } from '@/lib/queries/files';
+import { useDeleteFile } from "@/lib/queries/files";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,8 +10,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { toast } from 'sonner';
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 interface DeleteFileDialogProps {
   open: boolean;
@@ -20,16 +20,23 @@ interface DeleteFileDialogProps {
   fileName: string;
 }
 
-export function DeleteFileDialog({ open, onOpenChange, fileId, fileName }: DeleteFileDialogProps) {
+export function DeleteFileDialog({
+  open,
+  onOpenChange,
+  fileId,
+  fileName,
+}: DeleteFileDialogProps) {
   const deleteFile = useDeleteFile();
 
   const handleDelete = async () => {
     try {
       await deleteFile.mutateAsync(fileId);
-      toast.success('File deleted successfully');
+      toast.success("File deleted successfully");
       onOpenChange(false);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to delete file');
+      toast.error(
+        error instanceof Error ? error.message : "Failed to delete file"
+      );
     }
   };
 
@@ -39,7 +46,8 @@ export function DeleteFileDialog({ open, onOpenChange, fileId, fileName }: Delet
         <AlertDialogHeader>
           <AlertDialogTitle>Delete File</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete "{fileName}"? This action cannot be undone.
+            Are you sure you want to delete &quot;{fileName}&quot;? This action
+            cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -49,7 +57,7 @@ export function DeleteFileDialog({ open, onOpenChange, fileId, fileName }: Delet
             disabled={deleteFile.isPending}
             className="bg-red-600 hover:bg-red-700"
           >
-            {deleteFile.isPending ? 'Deleting...' : 'Delete'}
+            {deleteFile.isPending ? "Deleting..." : "Delete"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
