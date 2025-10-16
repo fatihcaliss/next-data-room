@@ -7,6 +7,7 @@ import {
   deleteFolder,
   getFolders,
   getFolderPath,
+  getAllFolders,
 } from "@/lib/actions/folders";
 import { UpdateFolderData } from "@/lib/types";
 
@@ -14,6 +15,13 @@ export function useFolders(parentId: string | null = null) {
   return useQuery({
     queryKey: ["folders", parentId],
     queryFn: () => getFolders(parentId),
+  });
+}
+
+export function useAllFolders() {
+  return useQuery({
+    queryKey: ["folders", "all"],
+    queryFn: () => getAllFolders(),
   });
 }
 

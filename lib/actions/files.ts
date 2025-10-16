@@ -181,3 +181,27 @@ export async function getFileUrl(fileId: string) {
 
   return data?.signedUrl;
 }
+
+export async function getAllFiles() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  const { data: files, error } = await supabase
+    .from("files")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("name");
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return files;
+}

@@ -158,3 +158,27 @@ export async function getFolderPath(folderId: string) {
 
   return path;
 }
+
+export async function getAllFolders() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  const { data: folders, error } = await supabase
+    .from("folders")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("name");
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return folders;
+}

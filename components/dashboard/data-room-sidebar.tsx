@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { FolderPlus, Upload, Folder } from "lucide-react";
-import { useFolders } from "@/lib/queries/folders";
+import { FolderPlus, Upload, Folder, File as FileIcon } from "lucide-react";
+import { useAllFolders } from "@/lib/queries/folders";
+import { useAllFiles } from "@/lib/queries/files";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -20,6 +21,7 @@ import {
 import { CreateFolderDialog } from "@/components/folders/create-folder-dialog";
 import { UploadPdfDialog } from "@/components/files/upload-pdf-dialog";
 import { useUser } from "@/lib/supabase/client";
+import { FolderTreeItem } from "./folder-tree-item";
 
 export function DataRoomSidebar() {
   const [showCreateFolder, setShowCreateFolder] = useState(false);
@@ -27,7 +29,17 @@ export function DataRoomSidebar() {
   const pathname = usePathname();
   const { data: user } = useUser();
 
-  const { data: rootFolders, isLoading } = useFolders(null);
+  const { data: allFolders, isLoading: foldersLoading } = useAllFolders();
+  const { data: allFiles, isLoading: filesLoading } = useAllFiles();
+
+  const isLoading = foldersLoading || filesLoading;
+
+  // Get root level folders (folders with no parent)
+  const rootFolders =
+    allFolders?.filter((folder) => folder.parent_id === null) || [];
+
+  // Get root level files (files with no folder)
+  const rootFiles = allFiles?.filter((file) => file.folder_id === null) || [];
 
   return (
     <>
@@ -49,7 +61,7 @@ export function DataRoomSidebar() {
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     onClick={() => setShowCreateFolder(true)}
-                    className="w-full justify-start text-left h-auto p-3 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
+                    className="w-full justify-start text-left h-auto p-3 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer border border-gray-200 dark:border-gray-700"
                   >
                     <FolderPlus className="h-4 w-4" />
                     <div className="flex justify-between w-full">
@@ -64,7 +76,7 @@ export function DataRoomSidebar() {
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     onClick={() => setShowUploadPdf(true)}
-                    className="w-full justify-start text-left h-auto p-3 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
+                    className="w-full justify-start text-left h-auto p-3 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer border border-gray-200 dark:border-gray-700"
                   >
                     <Upload className="h-4 w-4" />
                     <div className="flex justify-between w-full">
@@ -108,20 +120,26 @@ export function DataRoomSidebar() {
                         </div>
                       </SidebarMenuItem>
                     ))
-                  : rootFolders &&
-                    rootFolders.length > 0 && (
+                  : (rootFolders.length > 0 || rootFiles.length > 0) && (
                       <div className="ml-4 space-y-1">
+                        {/* Render root level folders with their children */}
                         {rootFolders.map((folder) => (
-                          <SidebarMenuItem key={folder.id}>
-                            <SidebarMenuButton
-                              asChild
-                              isActive={pathname === `/dataroom/${folder.id}`}
-                              className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
-                            >
-                              <Link href={`/dataroom/${folder.id}`}>
-                                <Folder className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                                <span className="truncate">{folder.name}</span>
-                              </Link>
+                          <FolderTreeItem
+                            key={folder.id}
+                            folder={folder}
+                            allFolders={allFolders || []}
+                            allFiles={allFiles || []}
+                          />
+                        ))}
+
+                        {/* Render root level files */}
+                        {rootFiles.map((file) => (
+                          <SidebarMenuItem key={file.id}>
+                            <SidebarMenuButton className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer">
+                              <FileIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                              <span className="truncate text-sm">
+                                {file.name}
+                              </span>
                             </SidebarMenuButton>
                           </SidebarMenuItem>
                         ))}

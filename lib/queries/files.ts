@@ -1,13 +1,26 @@
-'use client';
+"use client";
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { uploadFile, deleteFile, getFiles, getFileUrl } from '@/lib/actions/files';
-import { UploadFileData } from '@/lib/types';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  uploadFile,
+  deleteFile,
+  getFiles,
+  getFileUrl,
+  getAllFiles,
+} from "@/lib/actions/files";
+import { UploadFileData } from "@/lib/types";
 
 export function useFiles(folderId: string) {
   return useQuery({
-    queryKey: ['files', folderId],
+    queryKey: ["files", folderId],
     queryFn: () => getFiles(folderId),
+  });
+}
+
+export function useAllFiles() {
+  return useQuery({
+    queryKey: ["files", "all"],
+    queryFn: () => getAllFiles(),
   });
 }
 
@@ -17,7 +30,7 @@ export function useUploadFile() {
   return useMutation({
     mutationFn: uploadFile,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['files'] });
+      queryClient.invalidateQueries({ queryKey: ["files"] });
     },
   });
 }
@@ -28,14 +41,14 @@ export function useDeleteFile() {
   return useMutation({
     mutationFn: deleteFile,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['files'] });
+      queryClient.invalidateQueries({ queryKey: ["files"] });
     },
   });
 }
 
 export function useFileUrl(fileId: string) {
   return useQuery({
-    queryKey: ['fileUrl', fileId],
+    queryKey: ["fileUrl", fileId],
     queryFn: () => getFileUrl(fileId),
     enabled: !!fileId,
   });
