@@ -21,6 +21,25 @@ export async function createFolder(data: CreateFolderData) {
       ? null
       : data.parent_id;
 
+  // Check if a folder with the same name already exists in the same parent
+  let existingQuery = supabase
+    .from("folders")
+    .select("id")
+    .eq("user_id", user.id)
+    .eq("name", data.name);
+
+  if (actualParentId === null) {
+    existingQuery = existingQuery.is("parent_id", null);
+  } else {
+    existingQuery = existingQuery.eq("parent_id", actualParentId);
+  }
+
+  const { data: existingFolder } = await existingQuery.maybeSingle();
+
+  if (existingFolder) {
+    throw new Error("A folder with this name already exists in this location");
+  }
+
   const { data: folder, error } = await supabase
     .from("folders")
     .insert({
@@ -48,6 +67,38 @@ export async function updateFolder(id: string, data: UpdateFolderData) {
 
   if (!user) {
     throw new Error("Unauthorized");
+  }
+
+  // Get the current folder to find its parent_id
+  const { data: currentFolder, error: fetchError } = await supabase
+    .from("folders")
+    .select("parent_id")
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .single();
+
+  if (fetchError || !currentFolder) {
+    throw new Error("Folder not found");
+  }
+
+  // Check if a folder with the same name already exists in the same parent (excluding current folder)
+  let existingQuery = supabase
+    .from("folders")
+    .select("id")
+    .eq("user_id", user.id)
+    .eq("name", data.name)
+    .neq("id", id);
+
+  if (currentFolder.parent_id === null) {
+    existingQuery = existingQuery.is("parent_id", null);
+  } else {
+    existingQuery = existingQuery.eq("parent_id", currentFolder.parent_id);
+  }
+
+  const { data: existingFolder } = await existingQuery.maybeSingle();
+
+  if (existingFolder) {
+    throw new Error("A folder with this name already exists in this location");
   }
 
   const { error } = await supabase

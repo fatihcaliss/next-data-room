@@ -1,12 +1,17 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useCreateFolder } from '@/lib/queries/folders';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { toast } from 'sonner';
+import { useState } from "react";
+import { useCreateFolder } from "@/lib/queries/folders";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 interface CreateFolderDialogProps {
   open: boolean;
@@ -14,15 +19,19 @@ interface CreateFolderDialogProps {
   parentId?: string | null;
 }
 
-export function CreateFolderDialog({ open, onOpenChange, parentId = null }: CreateFolderDialogProps) {
-  const [name, setName] = useState('');
+export function CreateFolderDialog({
+  open,
+  onOpenChange,
+  parentId = null,
+}: CreateFolderDialogProps) {
+  const [name, setName] = useState("");
   const createFolder = useCreateFolder();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!name.trim()) {
-      toast.error('Folder name is required');
+      toast.error("Folder name is required");
       return;
     }
 
@@ -31,12 +40,14 @@ export function CreateFolderDialog({ open, onOpenChange, parentId = null }: Crea
         name: name.trim(),
         parent_id: parentId,
       });
-      
-      toast.success('Folder created successfully');
-      setName('');
+
+      toast.success("Folder created successfully");
+      setName("");
       onOpenChange(false);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to create folder');
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create folder"
+      );
     }
   };
 
@@ -46,7 +57,7 @@ export function CreateFolderDialog({ open, onOpenChange, parentId = null }: Crea
         <DialogHeader>
           <DialogTitle>Create New Folder</DialogTitle>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="folderName">Folder Name</Label>
@@ -59,7 +70,7 @@ export function CreateFolderDialog({ open, onOpenChange, parentId = null }: Crea
               autoFocus
             />
           </div>
-          
+
           <div className="flex justify-end space-x-2">
             <Button
               type="button"
@@ -68,11 +79,8 @@ export function CreateFolderDialog({ open, onOpenChange, parentId = null }: Crea
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={createFolder.isPending}
-            >
-              {createFolder.isPending ? 'Creating...' : 'Create'}
+            <Button type="submit" disabled={createFolder.isPending}>
+              {createFolder.isPending ? "Creating..." : "Create"}
             </Button>
           </div>
         </form>
