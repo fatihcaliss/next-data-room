@@ -6,18 +6,18 @@ A modern, secure document management and sharing platform built with Next.js, Su
 
 ## Features
 
-- 🔐 **Authentication**: Secure user authentication with Supabase Auth
-- 📁 **Folder Management**: Create, rename, delete, and navigate nested folders
-- 📄 **PDF Upload**: Upload and manage PDF files with 10MB size limit
-- 🎯 **Drag & Drop Upload**: Drag and drop PDF files directly into the upload dialog
-- 🔍 **Duplicate Detection**: Automatic detection of duplicate file names with skip option
-- ☑️ **Bulk Selection**: Select multiple files and folders with checkboxes
-- 🗑️ **Bulk Delete**: Delete multiple items at once with a single action
-- 🔗 **Public Folder Sharing**: Generate unique shareable links for folders with read-only access
-- 👀 **Read-Only View**: Public users can view shared folders without authentication
-- 🔒 **Secure Tokens**: 64-character unique tokens for each share link
-- ⌨️ **Keyboard Shortcuts**: Quick actions with Cmd+/ (new folder) and Cmd+. (upload)
-- 📱 **Responsive Design**: Works on desktop and mobile devices
+- **Authentication**: Secure user authentication with Supabase Auth
+- **Folder Management**: Create, rename, delete, and navigate nested folders
+- **PDF Upload**: Upload and manage PDF files with 10MB size limit
+- **Drag & Drop Upload**: Drag and drop PDF files directly into the upload dialog
+- **Duplicate Detection**: Automatic detection of duplicate file names with skip option
+- **Bulk Selection**: Select multiple files and folders with checkboxes
+- **Bulk Delete**: Delete multiple items at once with a single action
+- **Public Folder Sharing**: Generate unique shareable links for folders with read-only access
+- **Read-Only View**: Public users can view shared folders without authentication
+- **Secure Tokens**: 64-character unique tokens for each share link
+- **Keyboard Shortcuts**: Quick actions with Cmd+/ (new folder) and Cmd+. (upload)
+- **Responsive Design**: Works on desktop and mobile devices
 
 ## Tech Stack
 
@@ -164,7 +164,3 @@ Row Level Security (RLS) ensures:
 │   └── utils/           # Utility functions
 └── hooks/               # Custom React hooks (keyboard shortcuts, mobile detection)
 ```
-
-## License
-
-This project is licensed under the MIT License.
