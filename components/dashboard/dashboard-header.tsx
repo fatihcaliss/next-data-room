@@ -1,19 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { User } from "@supabase/supabase-js";
 import { Search, Command } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { SearchDialog } from "@/components/search-dialog";
+import { Breadcrumbs } from "../dataroom/breadcrumbs";
+import { usePathname } from "next/navigation";
 
-interface DashboardHeaderProps {
-  user: User;
-}
-
-export function DashboardHeader({ user }: DashboardHeaderProps) {
+export function DashboardHeader() {
   const [searchOpen, setSearchOpen] = useState(false);
+  const pathname = usePathname();
+  const folderId = pathname.split("/").pop();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -34,7 +33,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
           <div className="flex items-center space-x-4">
             <SidebarTrigger className="text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800" />
             <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-              <span>Data Room ({user.email})</span>
+              <Breadcrumbs folderId={folderId} />
             </div>
           </div>
 

@@ -14,11 +14,11 @@ import { ChevronRight } from "lucide-react";
 import { useUser } from "@/lib/supabase/client";
 
 interface BreadcrumbsProps {
-  folderId: string;
+  folderId?: string;
 }
 
 export function Breadcrumbs({ folderId }: BreadcrumbsProps) {
-  const { data: path, isLoading } = useFolderPath(folderId);
+  const { data: path, isLoading } = useFolderPath(folderId ?? "root");
   const { data: user } = useUser();
 
   if (isLoading) {
@@ -26,7 +26,7 @@ export function Breadcrumbs({ folderId }: BreadcrumbsProps) {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <div className="h-4 w-32 bg-gray-700 rounded animate-pulse" />
+            <div className="h-4 w-32 bg-gray-100 dark:bg-gray-800 rounded animate-pulse" />
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -39,7 +39,8 @@ export function Breadcrumbs({ folderId }: BreadcrumbsProps) {
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
             <Link href="/dataroom/root">
-              Data Room ({user?.email ? `${user.email.slice(0, 10)}...` : 'root'})
+              Data Room (
+              {user?.email ? `${user.email.slice(0, 10)}...` : "root"})
             </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>

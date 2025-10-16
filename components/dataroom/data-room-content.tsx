@@ -42,9 +42,6 @@ export function DataRoomContent({ folderId }: DataRoomContentProps) {
     },
   ]);
 
-  console.log("folders:", folders);
-  console.log("files:", files);
-  console.log("folderId", folderId);
   return (
     <div className="space-y-6 p-6">
       {/* Header with actions */}

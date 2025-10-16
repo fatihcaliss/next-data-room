@@ -25,7 +25,7 @@ export default async function DashboardLayout({
         <div className="flex h-[calc(100vh-4rem)]">
           <DataRoomSidebar />
           <SidebarInset className="flex-1 p-6 bg-white dark:bg-gray-900 overflow-auto">
-            <DashboardHeader user={user} />
+            <DashboardHeader />
             {children}
           </SidebarInset>
         </div>
