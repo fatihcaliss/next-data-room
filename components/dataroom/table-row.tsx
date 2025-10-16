@@ -33,9 +33,16 @@ import { toast } from "sonner";
 interface TableRowProps {
   item: FolderType | FileType;
   type: "folder" | "file";
+  isSelected?: boolean;
+  onSelect?: (checked: boolean) => void;
 }
 
-export function TableRow({ item, type }: TableRowProps) {
+export function TableRow({
+  item,
+  type,
+  isSelected = false,
+  onSelect,
+}: TableRowProps) {
   const [showRename, setShowRename] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showShare, setShowShare] = useState(false);
@@ -92,7 +99,12 @@ export function TableRow({ item, type }: TableRowProps) {
     <>
       <div className="grid grid-cols-12 gap-4 p-4 hover:bg-gray-750 transition-colors group md:text-sm text-xs min-[320px]:text-xs overflow-x-auto">
         <div className="col-span-1 flex items-center">
-          <input type="checkbox" className="rounded" />
+          <input
+            type="checkbox"
+            className="rounded"
+            checked={isSelected}
+            onChange={(e) => onSelect?.(e.target.checked)}
+          />
         </div>
 
         <div className="col-span-5 flex items-center space-x-3">
