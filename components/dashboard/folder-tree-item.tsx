@@ -38,9 +38,6 @@ export function FolderTreeItem({
   const hasChildren = childFolders.length > 0 || folderFiles.length > 0;
   const isActive = pathname === `/dataroom/${folder.id}`;
 
-  console.log("folderFiles:", folderFiles);
-  console.log("allFiles:", allFiles);
-
   return (
     <>
       <SidebarMenuItem>
