@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { RenameFolderDialog } from "@/components/folders/rename-folder-dialog";
 import { DeleteFolderDialog } from "@/components/folders/delete-folder-dialog";
+import { RenameFileDialog } from "@/components/files/rename-file-dialog";
 import { DeleteFileDialog } from "@/components/files/delete-file-dialog";
 import { ShareLinkDialog } from "@/components/share-link-dialog";
 import { useFileUrl } from "@/lib/queries/files";
@@ -124,11 +125,7 @@ export function TableRow({ item, type }: TableRowProps) {
         <div className="col-span-1 flex justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="opacity-0 group-hover:opacity-100 transition-opacity"
-              >
+              <Button variant="ghost" size="sm">
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -153,6 +150,10 @@ export function TableRow({ item, type }: TableRowProps) {
                 </>
               ) : (
                 <>
+                  <DropdownMenuItem onClick={() => setShowRename(true)}>
+                    <Edit className="h-4 w-4 mr-2" />
+                    Rename
+                  </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={handleDownload}
                     disabled={isDownloading || !fileUrl}
@@ -198,12 +199,20 @@ export function TableRow({ item, type }: TableRowProps) {
       )}
 
       {!isFolder && file && (
-        <DeleteFileDialog
-          open={showDelete}
-          onOpenChange={setShowDelete}
-          fileId={file.id}
-          fileName={file.name}
-        />
+        <>
+          <RenameFileDialog
+            open={showRename}
+            onOpenChange={setShowRename}
+            fileId={file.id}
+            currentName={file.name}
+          />
+          <DeleteFileDialog
+            open={showDelete}
+            onOpenChange={setShowDelete}
+            fileId={file.id}
+            fileName={file.name}
+          />
+        </>
       )}
     </>
   );

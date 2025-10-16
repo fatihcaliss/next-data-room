@@ -32,6 +32,10 @@ export interface UpdateFolderData {
   name: string;
 }
 
+export interface UpdateFileData {
+  name: string;
+}
+
 export interface UploadFileData {
   file: File;
   folder_id: string;

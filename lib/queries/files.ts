@@ -3,12 +3,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   uploadFile,
+  updateFile,
   deleteFile,
   getFiles,
   getFileUrl,
   getAllFiles,
 } from "@/lib/actions/files";
-import { UploadFileData } from "@/lib/types";
+import { UploadFileData, UpdateFileData } from "@/lib/types";
 
 export function useFiles(folderId: string) {
   return useQuery({
@@ -29,6 +30,18 @@ export function useUploadFile() {
 
   return useMutation({
     mutationFn: uploadFile,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["files"] });
+    },
+  });
+}
+
+export function useUpdateFile() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateFileData }) =>
+      updateFile(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["files"] });
     },

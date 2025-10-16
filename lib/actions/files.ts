@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import { UploadFileData } from "@/lib/types";
+import { UploadFileData, UpdateFileData } from "@/lib/types";
 
 export async function uploadFile(data: UploadFileData) {
   const supabase = await createClient();
@@ -69,6 +69,30 @@ export async function uploadFile(data: UploadFileData) {
 
   revalidatePath("/dataroom");
   return file;
+}
+
+export async function updateFile(id: string, data: UpdateFileData) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  const { error } = await supabase
+    .from("files")
+    .update({ name: data.name })
+    .eq("id", id)
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/dataroom");
 }
 
 export async function deleteFile(id: string) {
