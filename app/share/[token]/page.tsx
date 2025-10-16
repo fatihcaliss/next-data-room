@@ -1,3 +1,4 @@
+import React from "react";
 import { notFound } from "next/navigation";
 import {
   validateShareToken,
@@ -8,6 +9,14 @@ import {
 } from "@/lib/actions/share";
 import { SharedDataRoomContent } from "@/components/dataroom/shared-data-room-content";
 import { Eye } from "lucide-react";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 interface SharePageProps {
   params: {
@@ -75,29 +84,26 @@ export default async function SharePage({
       {/* Breadcrumbs */}
       {folderPath.length > 1 && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <nav className="flex items-center space-x-2 text-sm">
-            {folderPath.map((pathFolder, index) => (
-              <div key={pathFolder.id} className="flex items-center">
-                {index > 0 && (
-                  <span className="mx-2 text-gray-400 dark:text-gray-600">
-                    /
-                  </span>
-                )}
-                {index < folderPath.length - 1 ? (
-                  <a
-                    href={`/share/${token}?folderId=${pathFolder.id}`}
-                    className="text-blue-600 dark:text-blue-400 hover:underline"
-                  >
-                    {pathFolder.name}
-                  </a>
-                ) : (
-                  <span className="text-gray-700 dark:text-gray-300 font-medium">
-                    {pathFolder.name}
-                  </span>
-                )}
-              </div>
-            ))}
-          </nav>
+          <Breadcrumb>
+            <BreadcrumbList>
+              {folderPath.map((pathFolder, index) => (
+                <React.Fragment key={pathFolder.id}>
+                  <BreadcrumbItem>
+                    {index < folderPath.length - 1 ? (
+                      <BreadcrumbLink
+                        href={`/share/${token}?folderId=${pathFolder.id}`}
+                      >
+                        {pathFolder.name}
+                      </BreadcrumbLink>
+                    ) : (
+                      <BreadcrumbPage>{pathFolder.name}</BreadcrumbPage>
+                    )}
+                  </BreadcrumbItem>
+                  {index < folderPath.length - 1 && <BreadcrumbSeparator />}
+                </React.Fragment>
+              ))}
+            </BreadcrumbList>
+          </Breadcrumb>
         </div>
       )}
 
