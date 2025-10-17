@@ -2,6 +2,9 @@
 
 A modern, secure document management and sharing platform built with Next.js, Supabase, and TypeScript.
 
+**Important Not**: You need to verify your email address before you can sign in.
+Check your email inbox for the confirmation link and click it to activate your account
+
 👉 [Live Demo](https://next-data-room.vercel.app/)
 
 ## Features
@@ -84,6 +87,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ### Authentication
 
 - Sign up with your email and password
+- **Important**: You need to verify your email address before you can sign in
+- Check your email inbox for the confirmation link and click it to activate your account
 - Sign in to access your data room
 - Sign out when done
 
